@@ -2,13 +2,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render,redirect
 from django.views.generic import TemplateView,View,DeleteView,UpdateView
 from django.contrib.auth.views import LoginView,LogoutView
-from main.forms import LoginForm,TypesForm,SchemaForm,SchemaFormFactory
+from main.forms import LoginForm,TypesForm,SchemaForm
 from main.models import Types,Schema,SchemaColumns
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, BaseUpdateView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.urls import reverse_lazy
 from django.forms import inlineformset_factory
+from django.forms import modelformset_factory, inlineformset_factory
+from django import forms
 
 
 
@@ -26,11 +28,10 @@ class HomePage(TemplateView):
     template_name = 'index.html'
 
     def get_context_data(self,*args, **kwargs):
-        print(Schema.objects.last().molumns())
         schemas = Schema.objects.filter(user=self.request.user)
         context = super().get_context_data(*args, **kwargs)
-
-        context['schemas'] = schemas
+        if schemas:
+            context['schemas'] = schemas
         return context
 
 class CreateCsvView(View,FormMixin):
@@ -74,11 +75,41 @@ class CreateCsvView(View,FormMixin):
         return render(request, 'create.html', context)
 
 class DownloadView(View):
-    def get(self, request):
+    template_name = 'download.html'
+
+    def post(self,*args,**kwargs):
+        row_count = self.request.POST.get('value')
+        user = self.request.user
+        schemas = Schema.objects.filter(user__id=user.id)[:int(row_count)]
+        for schema in list(schemas):
+            print(schema.molumns())
+        # for schema in schemas:
+            # schemaColumns = schema.select_related('schemaColumns__column_name','schemaColumns__column_type','schemaColumns__order')
+            # print(schemaColumns.values('title','schemaColumns__column_name','schemaColumns__column_type','schemaColumns__order'))
+        # for schema in schemas:
+        #     print(schema.schemaColumns.column_name.value())
+        # for schema in schemas:
+        #     print(schema.title)
+        #     print(schema.schemaColumns__column_name)
+            # for e in schema:
+            #     print(e)
+            # print(list(schema.values()))
+            # print(getattr(schema, ('title','schemaColumns__column_name','schemaColumns__column_type','schemaColumns__order')))
+            # print(schema.values_list('title','schemaColumns__column_name','schemaColumns__column_type','schemaColumns__order'))
         context = {
-            'types': 'types'
+            'schemas':schemas
         }
-        return render(request, 'download.html', context)
+        return render(self.request, 'download.html',context)
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        schemas = Schema.objects.filter(user__id=user.id)
+        context={
+            'schemas':schemas
+        }
+        return render(self.request, 'download.html',context)
+
+
 
 class TypeList(APIView):
     def get(self,request):
@@ -103,33 +134,81 @@ class SchemaDeleteView(DeleteView):
 #     template_name = 'update.html'
 
 
-class SchemaUpdateView(UpdateView):
-  model = Schema
-  form_class = SchemaForm
-  template_name = 'update.html'
+# class SchemaUpdateView(UpdateView):
+#   model = Schema
+#   form_class = SchemaForm
+#   template_name = 'update.html'
+#
+#   def get(self, request, *args, **kwargs):
+#     self.object = self.get_object()
+#     form_class = self.get_form_class()
+#     form = self.get_form(form_class)
+#     schema_line_item = SchemaFormFactory(instance = self.object)
+#     return self.render_to_response(self.get_context_data(form = form, schema_line_item_form = schema_line_item))
+#
+#   def post(self, request, *args, **kwargs):
+#     self.object = self.get_object()
+#     form_class = self.get_form_class()
+#     form = self.get_form(form_class)
+#     schema_line_item_form = SchemaFormFactory(self.request.POST, instance=self.object)
+#
+#     if (form.is_valid() and schema_line_item_form.is_valid()):
+#       return self.form_valid(form, schema_line_item_form)
+#     return self.form_invalid(form, schema_line_item_form)
+#
+#   def form_valid(self, form, expense_line_item_form):
+#     self.object = form.save()
+#     expense_line_item_form.instance = self.object
+#     expense_line_item_form.save()
+#     return HttpResponseRedirect(self.get_success_url())
+#
+#   def form_invalid(self, form, schema_line_item_form):
+#     return self.render_to_response(self.get_context_data(form=form, schema_line_item_form=schema_line_item_form))
 
-  def get(self, request, *args, **kwargs):
-    self.object = self.get_object()
-    form_class = self.get_form_class()
-    form = self.get_form(form_class)
-    schema_line_item = SchemaFormFactory(instance = self.object)
-    return self.render_to_response(self.get_context_data(form = form, schema_line_item_form = schema_line_item))
 
-  def post(self, request, *args, **kwargs):
-    self.object = self.get_object()
-    form_class = self.get_form_class()
-    form = self.get_form(form_class)
-    schema_line_item_form = SchemaFormFactory(self.request.POST, instance=self.object)
+class SchemaUpdateView(View):
+    form_class = SchemaForm
+    model = Schema
+    template_name = 'update.html'
 
-    if (form.is_valid() and schema_line_item_form.is_valid()):
-      return self.form_valid(form, schema_line_item_form)
-    return self.form_invalid(form, schema_line_item_form)
+    def get(self, request, *args, **kwargs):
+        types = TypesForm()
+        schema_id = kwargs.get('pk')
+        schema = Schema.objects.get(pk=schema_id)
+        SchemaFormSet = inlineformset_factory(Schema, SchemaColumns, fields=('column_name','column_type','order',),extra=0)
+        formset = SchemaFormSet(instance=schema)
+        form = SchemaForm(instance=schema)
+        return render(request, 'update.html', {'formset': formset,'form':form,'types':types})
 
-  def form_valid(self, form, expense_line_item_form):
-    self.object = form.save()
-    expense_line_item_form.instance = self.object
-    expense_line_item_form.save()
-    return HttpResponseRedirect(self.get_success_url())
+    def post(self,request, *args, **kwargs):
+        schema_id = kwargs.get('pk')
+        schema = Schema.objects.get(pk=schema_id)
+        SchemaFormSet = inlineformset_factory(Schema, SchemaColumns, fields=('column_name', 'column_type', 'order',),
+                                              extra=0,widgets ={
+            'column-name':forms.TextInput(attrs={
+                'class':'form-control'
+            }),
+            'order':forms.TextInput(attrs={
+                'class':'form-control'
+            })
+        })
+        # formset = LanguageFormset(request.POST, queryset=Language.objects.filter(programmer__id=programmer.id))
+        formset = SchemaFormSet(request.POST, instance=schema)
+        if formset.is_valid():
+            formset.save()
+            # instances = formset.save(commit=False)
+            # for instance in instances:
+            #    instance.programmer_id = programmer.id
+            #    instance.save()
+        else:
+            print(formset.errors)
+            return HttpResponseRedirect(reverse_lazy('home'))
+        return HttpResponseRedirect(reverse_lazy('home'))
 
-  def form_invalid(self, form, schema_line_item_form):
-    return self.render_to_response(self.get_context_data(form=form, schema_line_item_form=schema_line_item_form))
+
+class GenerateDataView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('pk')
+
+
+        return None

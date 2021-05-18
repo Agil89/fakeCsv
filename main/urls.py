@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import HomePage,CustomLoginView,CreateCsvView,DownloadView,TypeList,SchemaDeleteView,SchemaUpdateView
+from .views import HomePage,CustomLoginView,CreateCsvView,DownloadView,TypeList,SchemaDeleteView,SchemaUpdateView,\
+    GenerateDataView
 from django.contrib.auth.views import LogoutView
 
 urlpatterns=[
@@ -10,5 +11,6 @@ urlpatterns=[
     path('logout/', LogoutView.as_view(), name='logout'),
     path('types/',TypeList.as_view(),name='types'),
     path('deleteSchema/<int:pk>/',SchemaDeleteView.as_view(),name='delete'),
-    path('update/<int:pk>/',SchemaUpdateView.as_view(),name='update')
+    path('update/<int:pk>/',SchemaUpdateView.as_view(),name='update'),
+    path('generate/<int:pk>/',GenerateDataView.as_view(),name='generate')
 ]

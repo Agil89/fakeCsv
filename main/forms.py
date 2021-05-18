@@ -61,8 +61,13 @@ class SchemaForm(forms.ModelForm):
     #     self.fields['schemaColumns'].queryset = SchemaColumns.objects
     class Meta:
         model = Schema
-        fields = ['title','user']
-SchemaFormFactory = inlineformset_factory(Schema, SchemaColumns, fields=('column_name','column_type','order','range'), can_delete=False)
+        fields = ('title','user',)
+        widgets ={
+            'title':forms.TextInput(attrs={
+                'class':'form-control'
+            })
+        }
+# SchemaFormFactory = inlineformset_factory(Schema, SchemaColumns, fields=('column_name','column_type','order','range'), can_delete=False)
 
 
 # class UpdateSchemaForm(forms.ModelForm):

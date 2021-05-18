@@ -30,6 +30,8 @@ class Schema(models.Model):
     user = models.ForeignKey(USER_MODEL, verbose_name='Author', on_delete=models.CASCADE, db_index=True)
     title = models.CharField('Title', max_length=50, unique=True)
     created_at = models.DateField(auto_now=True)
+    url = models.CharField(max_length=200,blank=True,null=True)
+
 
     def molumns(self):
         return self.schemaColumns.all()
