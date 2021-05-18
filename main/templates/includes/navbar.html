@@ -1,0 +1,28 @@
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+{% endblock %}
+<nav class="navbar navbar-light bg-light">
+    <div class="row w-100 align-items-center justify-content-around">
+        <div class="col-1">
+
+        </div>
+        <div class="col-1 d-flex justify-content-start ">
+            <span class="fakecsv-text">
+                FakeCSV
+            </span>
+        </div>
+        <div class="col-1">
+            <span class="schemas-text">
+                Schemas
+            </span>
+        </div>
+        <div class="col-9 d-flex justify-content-end">
+            {% if user.is_authenticated %}
+            <span class="hello-text">
+                Hello,<span style="font-weight: bold;">{{user.username}}</span>  <a style="color: rgba(0, 0, 0, 0.3);" href="{% url 'logout' %}">Logout </a>
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</nav>

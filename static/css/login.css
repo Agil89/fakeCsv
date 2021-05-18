@@ -1,0 +1,11 @@
+.second-row{
+    border: 1px solid #E5E5E5;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.login-span{
+    font-size: 36px;
+    color: #373A3C;
+}

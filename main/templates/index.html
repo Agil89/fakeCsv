@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    
+</style>
+{% endblock %}
+{% block content %}
+
+
+
+<!-- <nav class="navbar navbar-light bg-light">
+    <div class="row w-100 align-items-center justify-content-around">
+        <div class="col-1">
+
+        </div>
+        <div class="col-1 d-flex justify-content-start ">
+            <span class="fakecsv-text">
+                FakeCSV
+            </span>
+        </div>
+        <div class="col-1">
+            <span class="schemas-text">
+                Schemas
+            </span>
+        </div>
+        <div class="col-9 d-flex justify-content-end">
+            {% if user.is_authenticated %}
+            <span class="hello-text">
+                Hello,<span style="font-weight: bold;">{{user.username}}</span>  <a style="color: rgba(0, 0, 0, 0.3);" href="{% url 'logout' %}">Logout </a>
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</nav> -->
+<div class="row">
+    <div class="col-1">
+
+    </div>
+    <div class="col-2 d-flex justify-content-start align-items-center pt-3">
+        <span class="data-text"> Data schemas</span>
+    </div>
+    <div class="col-6 d-flex justify-content-end align-items-center pt-3">
+        <a href="/create" type="button" class="btn btn-success new-schema-button">New schema</a>
+    </div>
+    <div class="col-3"></div>
+    <div class="col-1"></div>
+    <div class="col-8 pt-3">
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Modified</th>
+                <th>Actions</th>
+            </tr>
+            {% for schema in schemas %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td><a href="#">{{schema.title}}</a> </td>
+                <td>{{schema.created_at}}</td>
+                <td>
+                <a href="{% url 'update' schema.id %}" >Edit scheme</a>
+                <a href="{% url 'delete' schema.id %}" class="text-danger delete-button">Delete</a></td>
+            </tr>
+            {% endfor %}
+            <!-- <tr>
+                <td>2</td>
+                <td><a href="#">Appartments</a> </td>
+                <td>2020-03-16</td>
+                <td><a href="#">Edit scheme</a>
+                <a href="#" class="text-danger delete-button">Delete</a></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><a href="#">Influencers</a> </td>
+                <td>2020-03-16</td>
+                <td><a href="#">Edit scheme</a>
+                <a href="#" class="text-danger delete-button">Delete</a></td>
+            </tr>
+             -->
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

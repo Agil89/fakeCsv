@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/create.css' %}">
+
+{% endblock %}
+{% block content %}
+
+<div class="row">
+    <form action="" method="post">
+        {% csrf_token %}
+    <div class="col-12">
+        <div class="row">
+            <div class="col-1">
+            </div>
+            <div class="col-2 d-flex justify-content-start align-items-center pt-3">
+                <span class="data-text">New schema</span>
+            </div>
+            <div class="col-6 d-flex justify-content-end align-items-center pt-3 form-group">
+                <input type="submit" class="btn btn-primary new-schema-button">
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-1"></div>
+            <div class="col-4">
+                <label for="inputPassword5" class="form-label">Name</label>
+                <input name="name" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-1"></div>
+            <div class="col-4">
+                <label for="inputPassword5" class="form-label">Column seperator</label>
+                <input type="text" value="Comma(,)" class="form-control">
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-1"></div>
+            <div class="col-4">
+                <label for="inputPassword5" class="form-label">String character</label>
+                <input type="text" value='Double-quote(")' class="form-control">
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row pt-3">
+                <div class="col-1"></div>
+                <div class="col-11">
+                    <span style="font-size: 24px;">Schema columns</span>
+                </div>
+            </div>
+            <div class="row pt-3 added-div">
+                <div class="col-1"></div>
+                <div class="col-9 all-columns for-delete">
+                    <div><div class="row pt-3 ">
+                        <div class="col-4">
+                            <label class="form-label">Column name</label>
+                            <input type="text" name="column-name" class="form-control">
+                        </div>
+                        <div class="col-3 d-flex flex-column">
+                            <label class="form-label">Type</label>
+                            <select name="type" class="selectpicker form-control my-selector"  data-style="btn-default btn-block" data-menu-style="dropdown-blue">
+                            {% for x,y in types.fields.type.choices %}
+                               <option value="{{ x }}"{% if types.fields.type.value == x %} selected{% endif %}>{{ y }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-2 range"></div>
+                        <div class="col-3 d-flex">
+                            <div class="">
+                                <label class="form-label">Order</label>
+                                <div class="d-flex align-items-center">
+                                    <label class="form-label"></label>
+                                    <input name="order" type="text" class="form-control">
+                                    <a href="#" class="text-danger delete-button">Delete</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pt-3">
+                <div class="col-1"></div>
+                <div class="col-9 ">
+               
+                    <div class="row pt-3 pb-3 mt-3 mb-3 creating-div">
+                        <div class="col-4">
+                            <label class="form-label">Column name</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="col-3">
+                            <label class="form-label">Type</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="col-2">
+                        </div>
+                        <div class="col-3 d-flex">
+                            <div class="">
+                                <label class="form-label">Order</label>
+                                <div class="d-flex align-items-center">
+                                    <input type="text" class="form-control">
+                                    <a href="#" class="text-danger ">Delete</a>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12 pt-3">
+                            <button type="button" class="btn btn-primary btn-sm add-button">Add column</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/create.js' %}"></script>
+{% endblock %}

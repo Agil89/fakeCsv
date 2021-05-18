@@ -1,0 +1,14 @@
+.fakecsv-text{
+    font-size: 20px;
+    color:#000000;
+}
+.schemas-text{
+    font-size: 16px;
+}
+.hello-text{
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+}
+a{
+    text-decoration: none;
+}
