@@ -18,7 +18,6 @@ gunicorn==20.1.0
 importlib-metadata==4.0.1
 kombu==5.0.2
 prompt-toolkit==3.0.18
-psycopg2==2.8.6
 psycopg2-binary==2.8.6
 python-crontab==2.5.1
 python-dateutil==2.8.1
