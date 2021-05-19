@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import django_heroku
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -172,3 +173,6 @@ LOGOUT_REDIRECT_URL = reverse_lazy('login')
 LOGIN_REDIRECT_URL = reverse_lazy('download')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
