@@ -16,6 +16,7 @@ prompt-toolkit==3.0.18
 psycopg2-binary==2.8.6
 pytz==2021.1
 redis==3.5.3
+redis-server==5.0.7
 six==1.16.0
 sqlparse==0.4.1
 typing-extensions==3.10.0.0

@@ -55,23 +55,13 @@
             <tr>
                 <td>{{forloop.counter}}</td>
                 <td>{{schema.created_at}}</td>
-                <td><button type="button" class="btn btn-secondary btn-sm">Processing</button></td>
-                <td><a href="#" >Download</a></td>
+                <td>{% if schema.url %}
+                    <button type="button" style="background-color: #5CB85C;color: white;" class="btn btn-sm">Ready</button></td>
+                    {% else %} <button type="button" class="btn btn-secondary btn-sm">Processing</button>{% endif %}
+                <td>
+                    {% if schema.url %}<a href="/{{schema.url}}" >Download</a>{% endif %}</td>
             </tr>
             {% endfor %}
-            <!-- <tr>
-                <td>2</td>
-                <td>2020-03-16</td>
-                <td><button type="button" style="background-color: #5CB85C;color: white;" class="btn btn-sm">Ready</button></td>
-                <td><a href="#" >Download</a></td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>2020-03-16</td>
-                <td><button type="button" class="btn btn-secondary btn-sm">Processing</button></td>
-                <td></td>
-            </tr> -->
-            
         </table>
     </div>
 
