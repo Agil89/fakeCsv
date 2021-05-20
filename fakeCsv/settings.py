@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '^fyo%8zn@tn0n#_$ro^0&8yyp+v!5r^5q^4*#c4ls+(*bsf^#j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = not os.environ.get('DEBUG', False)
+DEBUG =  not os.environ.get('DEBUG', False)
 PROD = not DEBUG
 ALLOWED_HOSTS = ['*']
 
@@ -81,44 +81,54 @@ TEMPLATES = [
 WSGI_APPLICATION = 'fakeCsv.wsgi.application'
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Baku'
+if not PROD:
+    CELERY_BROKER_URL = 'redis://:7eSOXdGjlm1t0oGZ@redis:6379'
+    CELERY_RESULT_BACKEND = 'redis://:7eSOXdGjlm1t0oGZ@redis:6379'
+    CELERY_ACCEPT_CONTENT = ['application/json']
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TIMEZONE = 'Asia/Baku'
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_CREDENTIALS = True
+else:
+    CELERY_BROKER_URL = 'redis://localhost:6379'
+    CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+    CELERY_ACCEPT_CONTENT = ['application/json']
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TIMEZONE = 'Asia/Baku'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# if PROD:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#             'NAME': os.environ.get('POSTGRES_DB'),
-#             'USER': os.environ.get('POSTGRES_USER'),
-#             'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-#             'HOST': os.environ.get('POSTGRES_HOST'),
-#             'PORT': os.environ.get('POSTGRES_PORT')
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#             'NAME': 'fake_db',
-#             'USER': 'for_fake',
-#             'PASSWORD': '1234',
-#             'HOST': 'localhost',
-#             'PORT': '5432'
-#         }
-#     }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if PROD:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('POSTGRES_DB'),
+            'USER': os.environ.get('POSTGRES_USER'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'HOST': os.environ.get('POSTGRES_HOST'),
+            'PORT': os.environ.get('POSTGRES_PORT')
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'fake_db',
+            'USER': 'for_fake',
+            'PASSWORD': '1234',
+            'HOST': 'localhost',
+            'PORT': '5432'
+        }
+    }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
