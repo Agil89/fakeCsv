@@ -1,5 +1,6 @@
 .venv/
 venv
+.postgresdb
 db.sqlite
 media/
 __pycache__/

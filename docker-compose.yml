@@ -12,20 +12,20 @@ services:
     volumes:
       - ./redisdb:/var/lib/redis
 
-  celery:
-    restart: "always"
-    build:
-      context: .
-      dockerfile: celery.dockerfile
-    container_name: celery
-    env_file: .env
-    command: /venv/bin/celery --app=fakeCsv.celery:app worker -B --loglevel=INFO
-    volumes:
-      - .:/code
-    links:
-      - redis
-    depends_on:
-      - "redis"
+  # celery:
+  #   restart: "always"
+  #   build:
+  #     context: .
+  #     dockerfile: celery.dockerfile
+  #   container_name: celery
+  #   env_file: .env
+  #   command: ./.venv/bin/celery --app=fakeCsv.celery:app worker -B --loglevel=INFO
+  #   volumes:
+  #     - .:/code
+  #   links:
+  #     - redis
+  #   depends_on:
+  #     - "redis"
 
   postgres:
     container_name: postgres-db

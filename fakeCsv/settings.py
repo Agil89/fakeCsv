@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '^fyo%8zn@tn0n#_$ro^0&8yyp+v!5r^5q^4*#c4ls+(*bsf^#j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  not os.environ.get('DEBUG', False)
+DEBUG =  os.environ.get('DEBUG', False)
 PROD = not DEBUG
 ALLOWED_HOSTS = ['*']
 
@@ -82,8 +82,8 @@ WSGI_APPLICATION = 'fakeCsv.wsgi.application'
 
 
 if not PROD:
-    CELERY_BROKER_URL = 'redis://:7eSOXdGjlm1t0oGZ@redis:6379'
-    CELERY_RESULT_BACKEND = 'redis://:7eSOXdGjlm1t0oGZ@redis:6379'
+    CELERY_BROKER_URL = 'redis://:test123@redis:6379'
+    CELERY_RESULT_BACKEND = 'redis://:test123@redis:6379'
     CELERY_ACCEPT_CONTENT = ['application/json']
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_RESULT_SERIALIZER = 'json'
@@ -101,7 +101,7 @@ else:
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-if PROD:
+if not PROD:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
